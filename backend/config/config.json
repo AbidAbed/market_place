@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "backend",
+    "password": "1234",
+    "database": "marketPlace",
+    "schema":"testing",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "backend",
+    "password": "1234",
+    "database": "marketPlace",
+    "schema":"testing",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "backend",
+    "password": "1234",
+    "database": "marketPlace",
+    "schema":"testing",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
