@@ -1,16 +1,23 @@
 function shopItemSnippetSetup(item, onChange) {
   return (
-    <div onClick={onChange}>
-      <div>{item.title}</div>
-      <div className="border-gray-500  bg-gray-100 border-2 w-128 h-128">
-        <img src={item.images[0]} />
+    <div
+      className="flex flex-col p-4 bg-white rounded-lg shadow-lg"
+      onClick={onChange}
+    >
+      <img
+        src={item.images[0]}
+        alt="Item Image"
+        class="w-96 h-auto rounded-lg mb-2"
+      />
+      <h2 class="text-lg font-semibold text-gray-800 mb-2">{item.title}</h2>
+      <p class="text-gray-600 mb-4">Amount available : {item.amount}</p>
+      <p class="text-gray-600 mb-4">Availablity : {item.status}</p>
+      <p class="text-gray-600 mb-4">
+        Created By : {item.creator || "Market Place"}{" "}
+      </p>
+      <div class="flex justify-between items-center">
+        <span class="text-gray-500 font-semibold">ONLY ${item.price}</span>
       </div>
-      <div>
-        <div>Amount available : {item.amount}</div>
-        <div>Availablity : {item.status}</div>
-      </div>
-      <div>Created By : {item.creator}</div>
-      <div>ONLY {item.price}$</div>
     </div>
   );
 }

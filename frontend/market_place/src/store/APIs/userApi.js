@@ -46,6 +46,7 @@ const userApi = createApi({
           return {
             url: "/users",
             method: "PUT",
+            credentials: "include",
             body: {
               email: updatedUserData.email,
               password: updatedUserData.password,
@@ -55,8 +56,7 @@ const userApi = createApi({
               city: updatedUserData.city,
               buildingNumber: updatedUserData.buildingNumber,
               street: updatedUserData.street,
-              newPassword: updatedUserData.newPassword,
-              id: updatedUserData.id,
+              newPassword: updatedUserData.newPassword
             },
           };
         },

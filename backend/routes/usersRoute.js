@@ -49,7 +49,6 @@ usersRoute.put(
   "/users",
   celebrate({
     [Segments.BODY]: Joi.object().keys({
-      id: numberConstraint,
       email: emailConstraint,
       password: stringConstraint.min(8),
       newPassword: stringConstraint.min(8).optional(),
@@ -60,6 +59,9 @@ usersRoute.put(
       buildingNumber: numberConstraint,
       street: stringConstraint,
       purchasedItems: Joi.array().items(Joi.number().integer()),
+    }),
+    [Segments.COOKIES]: Joi.object().keys({
+      token: stringConstraint,
     }),
   }),
   usersRouteController.updateUser

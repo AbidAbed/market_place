@@ -27,7 +27,7 @@ function shopItemShowSetup(item) {
       body: <></>,
     },
     {
-      text: `Estimated date of arrival : ${item.arrivalData}`,
+      text: `Estimated date of arrival : ${item.arrivalDate}`,
       body: <></>,
     },
     {

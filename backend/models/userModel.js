@@ -45,6 +45,11 @@ const userModel = sequelize.define(
       type: DataTypes.ARRAY(DataTypes.INTEGER),
       allowNull: true,
     },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     // createdItems: {
     //   type: DataTypes.ARRAY(DataTypes.BIGINT),
     //   allowNull: true,

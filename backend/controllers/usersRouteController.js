@@ -3,6 +3,19 @@ const bcrypt = require("bcrypt");
 const userModel = require("../models/userModel");
 const saltRounds = 2;
 const SECRETKEY = "secretKey";
+async function authUser(token, response) {
+  try {
+    const decoded = await jwt.verify(token, SECRETKEY);
+    return decoded;
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      response.status(401).send({ auth: false, message: "expired token" });
+    } else {
+      response.status(401).send({ auth: false, message: "invalid token" });
+    }
+    return { error };
+  }
+}
 async function postLogin(request, response) {
   try {
     const user = await userModel.findOne({
@@ -22,7 +35,7 @@ async function postLogin(request, response) {
     const { password, ...userData } = user.get({ plain: true });
 
     const token = await jwt.sign(
-      { email: userData.email, id: userData.id },
+      { email: userData.email, id: userData.id, isAdmin: userData.isAdmin },
       SECRETKEY
     );
     response.cookie("token", token, { maxAge: 1000 * 60 * 60, httpOnly: true });
@@ -72,6 +85,7 @@ async function postSignup(request, response) {
         .send({ email: "user already exists with passed email" });
     }
   } catch (error) {
+    console.log(error);
     response.status(500).send({ error: "internal server error" });
   }
 }
@@ -79,11 +93,9 @@ async function postSignup(request, response) {
 async function postAuth(request, response) {
   try {
     const { token } = request.cookies;
-    const decoded = await jwt.verify(token, SECRETKEY);
-    const { id } = decoded;
+    const { id } = await authUser(token, response);
     await userModel.sync();
     const user = await userModel.findByPk(id);
-
     if (user) {
       const {
         email,
@@ -108,23 +120,21 @@ async function postAuth(request, response) {
         street,
         purchasedItems: purchasedItems || [],
       };
-
       response.send({ auth: true, message: "valid token", data });
     } else {
       response.status(404).send({ error: "user doesn't exist" });
     }
-  } catch (error) {
-    if (error.name === "TokenExpiredError") {
-      response.status(401).send({ auth: false, message: "expired token" });
-    } else {
-      response.status(401).send({ auth: false, message: "invalid token" });
-    }
-  }
+  } catch (error) {}
 }
 
 async function updateUser(request, response) {
   try {
-    const userData = await userModel.findByPk(request.body.id);
+    const { token } = request.cookies;
+    const decoded = await authUser(token, response);
+    if (decoded.error) {
+      return;
+    }
+    const userData = await userModel.findByPk(decoded.id);
 
     if (!userData) {
       response.status(404).send({ error: "user doesn't exist" });
@@ -167,7 +177,7 @@ async function updateUser(request, response) {
     }
 
     const [, [updatedUserData]] = await userModel.update(updatedData, {
-      where: { id: request.body.id },
+      where: { id: decoded.id },
       returning: true,
     });
 
@@ -228,7 +238,7 @@ async function getUserById(request, response) {
 async function postLogout(request, response) {
   try {
     response.cookie("token", "", { maxAge: 0, httpOnly: true });
-    response.status(200).send()
+    response.status(200).send();
   } catch (err) {
     response.status(500).send({ error: "internal server error" });
   }
@@ -240,4 +250,5 @@ module.exports = {
   updateUser,
   getUserById,
   postLogout,
+  authUser
 };

@@ -2,6 +2,7 @@ const purchaseModel = require("../models/purchaseModel");
 const userModel = require("../models/userModel");
 const itemsModel = require("../models/itemsModel");
 const { literal } = require("../dbConfig");
+const { authUser } = require("./usersRouteController");
 async function getPurchases(request, response) {
   try {
     const { id } = request.query;
@@ -24,12 +25,16 @@ async function getPurchases(request, response) {
     response.status(500).send({ error: "Internal Server Error" });
   }
 }
-
 async function postPurchase(request, response) {
   try {
-    const { userId, items } = request.body;
+    const { token } = request.cookies;
+    const decoded = await authUser(token, response);
+    if (decoded.error) {
+      return;
+    }
+    const { items } = request.body;
 
-    const user = await userModel.findByPk(userId);
+    const user = await userModel.findByPk(decoded.id);
     if (!user) {
       response.send({ error: "user with passed id doesn't exist" });
       return;
@@ -104,7 +109,7 @@ async function postPurchase(request, response) {
             `array_append("purchasedItems", '${item.id}')`
           ),
         },
-        { where: { id: userId } }
+        { where: { id: decoded.id } }
       );
     }
 

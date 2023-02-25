@@ -15,6 +15,7 @@ const itemsApi = createApi({
       postPurchases: builder.mutation({
         query: (purchases) => {
           return {
+            credentials: "include",
             url: "/users/purchase",
             method: "POST",
             body: { ...purchases },

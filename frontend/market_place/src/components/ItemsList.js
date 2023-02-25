@@ -26,9 +26,9 @@ function ItemsList({
       const initialRenderedItems = items.map((obj) => (
         <div
           key={obj.id}
-          className="hover:bg-yellow-500 text-black font-bold border-gray-500  bg-gray-200 border-2 
-          shadow-md rounded px-8 pt-6 pb-8 mb-4 py-2 px-4 rounded transition duration-500 ease-in-out 
-          cursor-pointer italic  p-4 shadow-xl"
+          className="hover:bg-gray-300 text-black font-bold border-gray-500  bg-gray-200 border-2 
+          rounded px-8 pt-6 pb-8 mb-4 py-2 px-4 rounded transition duration-500 ease-in-out 
+          cursor-pointer italic  p-4 hover:shadow-2xl"
         >
           <Item
             item={obj}

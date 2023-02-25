@@ -20,6 +20,9 @@ itemsRoute.post(
       amount: numberConstraint,
       arrivalDate: Joi.date().iso().required(), //2023-02-19T14:30:00.000Z
     }),
+    [Segments.HEADERS]: Joi.object({
+      authorization: stringConstraint,
+    }).unknown(),
   }),
   itemsRouteController.postItem
 );

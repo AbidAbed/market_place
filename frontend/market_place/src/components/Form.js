@@ -14,7 +14,9 @@ function Form({ formData, className, onChange, errors }) {
         </label>
         {obj.body}
         {obj.label && errors[obj.label] && (
-          <p className="text-red-500 text-xs italic mt-1">{errors[obj.label]}</p>
+          <p className="text-red-500 text-xs italic mt-1">
+            {errors[obj.label]}
+          </p>
         )}
       </div>
     );
@@ -22,7 +24,10 @@ function Form({ formData, className, onChange, errors }) {
 
   return (
     <div className="flex justify-center items-center px-4 py-4">
-      <form className="border-gray-500  bg-gray-100 border-2 shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={(event) => onChange(event)}>
+      <form
+        className="border-gray-500  bg-gray-100 border-2 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        onSubmit={(event) => onChange(event)}
+      >
         {renderedForm}
       </form>
     </div>

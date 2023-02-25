@@ -6,7 +6,6 @@ import {
   removeCartItem,
   returnItemFromCart,
   setCurrentPath,
-  usePostLogoutMutation,
   usePostPurchasesMutation,
 } from "../store/storeInterface";
 import ItemsList from "../components/ItemsList";
@@ -20,9 +19,8 @@ function CartPage() {
   const [notificationShow, setNotificationShow] = useState();
   const [postPurchasesMutation, postPurchasesResult] =
     usePostPurchasesMutation();
-  const [cartItems, userId, { isLoggedIn }] = useSelector((state) => [
+  const [cartItems, { isLoggedIn }] = useSelector((state) => [
     state.cart,
-    state.user.id,
     state.config,
   ]);
   const dispatch = useDispatch();
@@ -44,11 +42,10 @@ function CartPage() {
     document.body.classList.remove("overflow-hidden");
     if (isLoggedIn) {
       //to do purchasing
-      const purchases = { userId };
       const items = cartItems.map((obj) => {
         return { id: obj.id, amountPurchased: obj.amountPurchased };
       });
-      purchases.items = [...items];
+      const purchases = { items: [...items] };
 
       postPurchasesMutation(purchases);
     } else {
@@ -100,8 +97,9 @@ function CartPage() {
         dispatch(setCurrentPath("/purchased"));
         const text = `All cart items are purchased , Thank you`;
         setNotificationShow(<Notification text={text} />);
+        setTimeout(() => window.location.reload(), 2000);
       } else {
-        const text = `Error while purchasing  ${postPurchasesResult.error}`;
+        const text = `Error while purchasing  items`;
         setNotificationShow(<Notification text={text} />);
       }
     }

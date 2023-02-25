@@ -36,7 +36,7 @@ const itemsModel = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    arrivalData: {
+    arrivalDate: {
       type: DataTypes.DATE,
     },
     // purchasedBy: {

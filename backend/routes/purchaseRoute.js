@@ -4,7 +4,7 @@ const purchaseRoute = express.Router();
 const { celebrate, Joi, errors, Segments } = require("celebrate");
 
 const numberConstraint = Joi.number().integer().not().empty().required();
-
+const stringConstraint = Joi.string().required().not().empty();
 purchaseRoute.get(
   "/users/purchase",
   celebrate({
@@ -28,7 +28,9 @@ purchaseRoute.post(
             .required()
         )
         .required(),
-      userId: numberConstraint,
+    }),
+    [Segments.COOKIES]: Joi.object().keys({
+      token: stringConstraint,
     }),
   }),
   purchaseController.postPurchase

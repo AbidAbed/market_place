@@ -1,7 +1,7 @@
 function Images({ data }) {
   const renderedData = data.map((obj,index) => {
     return (
-      <div key={index} className="px-2 mx-2 py-2 my-2 border border-yellow-800">
+      <div key={index} className="px-2 mx-2 py-2 my-2 border-2 border-gray-500">
         <img src={obj} className="w-96 h-auto"/>
       </div>
     );
